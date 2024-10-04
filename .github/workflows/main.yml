@@ -11,18 +11,19 @@ jobs:
             - name: checking out code
               uses: actions/checkout@v2
              
-            - name:   extrat git commit data
+            - name: extract git commit data
               uses: rlespinasse/git-commit-data-action@v1.x
+
             - name: Update Author info
               run: echo ${{env.GIT_COMMIT_AUTHOR_NAME}} > AUTHOR
-            - name:   Raise PR
+
+            - name: Raise PR
               uses: peter-evans/create-pull-request@v3 
               with:
                 branch: "auto-pr-branch"
                 title: "demo for auto pr"
-                committer: ${{env.GIT_COMMIT_AUTHOR_NAME}} <$${{env.GIT_COMMIT_AUTHOR_NAME}}
-                author: ${{env.GIT_COMMIT_AUTHOR_NAME}} <$${{env.GIT_COMMIT_AUTHOR_NAME}}
-                body:
-                    This is a pr to show automatic PR creation
+                committer: "${{env.GIT_COMMIT_AUTHOR_NAME}} <harshitaacharya03@gmail.com>"  # Replace with valid email
+                author: "${{env.GIT_COMMIT_AUTHOR_NAME}} <harshitaacharya03@gmail.com>"     # Replace with valid email
+                body: "This is a PR to show automatic PR creation"
                 token: ${{secrets.GITHUB_TOKEN}}
-                delete-branch: true    
+                delete-branch: true
