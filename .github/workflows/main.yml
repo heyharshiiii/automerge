@@ -1,23 +1,28 @@
-name: Auto Merge PR
+name:  Demo to create automatic PR
 
 on:
-  pull_request:
-    branches:
-      - main   # Trigger on PRs targeting the main branch
-    types:
-      - opened
-      - synchronize
-      - reopened
-      - ready_for_review
-
+    push:
+        branches:
+            - main
 jobs:
-  automerge:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Auto merge PR
-        if: github.event.pull_request.merged == false
-        run: |
-          gh pr merge ${{ github.event.pull_request.number }} --squash --auto
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    updateAuthor:
+        runs-on: ubuntu-latest
+        steps:
+            - name: checking out code
+              uses: actions/checkout@v2
+             
+            - name:   extrat git commit data
+              uses: rlespinasse/git-commit-data-action@v1.x
+            - name: Update Author info
+              run: echo ${{env.GIT_COMMIT_AUTHOR_NAME}} > AUTHOR
+            - name:   Raise PR
+              uses: peter-evans/create-pull-request@v3 
+              with:
+                branch: "auto-pr-branch"
+                title: "demo for auto pr"
+                committer: ${{env.GIT_COMMIT_AUTHOR_NAME}} <$${{env.GIT_COMMIT_AUTHOR_NAME}}
+                author: ${{env.GIT_COMMIT_AUTHOR_NAME}} <$${{env.GIT_COMMIT_AUTHOR_NAME}}
+                body:
+                    This is a pr to show automatic PR creation
+                token: ${{secrets.GITHUB_TOKEN}}
+                delete-branch: true    
