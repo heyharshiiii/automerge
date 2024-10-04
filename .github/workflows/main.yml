@@ -3,11 +3,10 @@ name: Auto Merge PR
 on:
   pull_request:
     branches:
-      - main   # Trigger on PRs targeting the main branch
+      - main
     types:
       - opened
       - synchronize
-      - reopened
       - ready_for_review
 
 jobs:
@@ -15,8 +14,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3  # This ensures the repo is available
+
+      - name: Install GitHub CLI
+        run: sudo apt-get install gh -y
+
       - name: Auto merge PR
-        if: github.event.pull_request.merged == false
         run: |
           gh pr merge ${{ github.event.pull_request.number }} --squash --auto
         env:
