@@ -2,19 +2,19 @@ name: Auto Merge PR
 
 on:
   pull_request:
+    branches:
+      - main   # Trigger on PRs targeting the main branch
     types:
-      - labeled  # Trigger when the PR is labeled
-      - ready_for_review  # Trigger when the PR is marked ready for review
-      - synchronize  # Trigger when the PR is updated
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
 
 jobs:
   automerge:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout the code
-        uses: actions/checkout@v3
-
       - name: Auto merge PR
         if: github.event.pull_request.merged == false
         run: |
